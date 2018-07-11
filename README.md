@@ -16,7 +16,7 @@ If successful, this will publish the metrics data into ambari metrics database (
 
 The `oozie_config.ini` file contains the configuration for the Oozie server to connect to, and the AMS collector node details.
 
-The `instrumentation.json` lists the parameters that are to be picked up from the instrumentation output in Oozie. For now, it supports only the gauges and counters sets of metrics.
+The `instrumentation.json` lists the parameters that are to be picked up from the instrumentation output in Oozie. For now, it supports only the `gauges` and `counters` sets of metrics.
 
 For continous monitoring of the oozie metrics, edit the above config files as needed and place the script and the config file on any node in the cluster (prefereably the Ambari metrics collector host itself, and add a crontab entry (crontab –e) to schedule it run. 
 
