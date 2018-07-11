@@ -29,22 +29,13 @@ The above crontab will execute the script every 5 minutes and publish the metric
 
 # Steps to create the Grafana dashboard to retrieve the custom metrics we collected.
 
-Login to Grafana as admin.
-
-Click on top Dashboard drop down menu -> +New
-
-Place your cursor on Green hidden tab -> Add Panel -> Graph alt text
-
-Fill the Metrics details
-
-Component Name : Oozie
-
-Metrics Name: select one from the metrics drop down menu. Eg. "jobstatus.SUCCEEDED" or "jpa.GET_PENDING_ACTIONS"
-
-Select Aggregator as none
-
-You can select Transform as diff or none, depending on requirement. 
-
-You can rename the panel.
-
-Follow the same to add more panels/graphs for each metric name.
+- Login to Grafana as admin.
+- Click on top Dashboard drop down menu -> +New
+- Place your cursor on Green hidden tab -> Add Panel -> Graph alt text
+- Fill the Metrics details
+- Component Name : Oozie
+- Metrics Name: select one from the metrics drop down menu. Eg. `jobstatus.SUCCEEDED` or `jpa.GET_PENDING_ACTIONS`
+- Select Aggregator as none
+- You can select Transform as diff or none, depending on requirement. 
+- You can rename the panel.
+- Follow the same to add more panels/graphs for each metric name.
