@@ -2,6 +2,7 @@
 
 import subprocess
 import sys
+import os
 import urllib2
 from urllib2 import URLError
 import socket
@@ -136,7 +137,7 @@ def publish_metrics(metric_data,ams_collector_host,ams_collector_port,timeout):
 def main():
 
   # If config file explicitly passed, use it. Else fall back to zk_config.ini as default filename
-  config_file = sys.argv[1] if len(sys.argv) >= 2 else 'oozie_config.ini'
+  config_file = sys.argv[1] if len(sys.argv) >= 2 else os.path.join(os.path.dirname(__file__),"oozie_config.ini")
   config_dict = {}
   config_dict = get_config_params(config_file)
   ams_collector_timeout = float(config_dict["ams_collector_timeout"])
@@ -146,7 +147,7 @@ def main():
   timestamp = int(time.time()*1000)
 
 
-  for key,value in json.load(open('instrumentation.json')).items():
+  for key,value in json.load(open(os.path.join(os.path.dirname(__file__),"instrumentation.json"))).items():
     i = 0
     for counter_types in value:
       if ( key == 'counters' ):
