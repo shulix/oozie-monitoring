@@ -1,5 +1,4 @@
-#!/usr/bin/python
-
+from __future__ import print_function
 import subprocess
 import sys
 import os
@@ -19,11 +18,11 @@ def get_config_params(config_file):
       try:
         parser = SafeConfigParser()
         parser.readfp(f)
-      except ConfigParser.Error, err:
-        print 'Could not parse: %s Exiting', err
+      except ConfigParser.Error as err:
+        print('Could not parse: %s Exiting', err)
         sys.exit(1)
   except IOError as e:
-    print "Unable to access %s. Error %s \nExiting" % (config_file, e)
+    print ("Unable to access %s. Error %s \nExiting") % (config_file, e)
     sys.exit(1)
 
   ams_collector_host = parser.get('ams_config', 'ams_collector_host')
@@ -31,13 +30,13 @@ def get_config_params(config_file):
   ams_collector_timeout = parser.get('ams_config', 'ams_collector_timeout')
 
   if not ams_collector_port.isdigit():
-    print "Invalid port specified for AMS Collector. Exiting"
+    print("Invalid port specified for AMS Collector. Exiting")
     sys.exit(1)
   if not is_valid_hostname(ams_collector_host):
-    print "Invalid hostname provided for AMS collector. Exiting"
+    print ("Invalid hostname provided for AMS collector. Exiting")
     sys.exit(1)
   if not ams_collector_timeout.isdigit():
-    print "Invalid timeout value specified for AMS Collector. Using default of 3 seconds"
+    print ("Invalid timeout value specified for AMS Collector. Using default of 3 seconds")
     ams_collector_timeout = 3
 
   oozie_server = parser.get('oozie_config', 'oozie_server')
@@ -45,13 +44,13 @@ def get_config_params(config_file):
   oozie_server_timeout = parser.get('oozie_config', 'oozie_server_timeout')
 
   if not oozie_port.isdigit():
-    print "Invalid port specified for Oozie Server. Exiting"
+    print ("Invalid port specified for Oozie Server. Exiting")
     sys.exit(1)
   if not is_valid_hostname(oozie_server):
-    print "Invalid hostname provided for Oozie Server. Exiting"
+    print ("Invalid hostname provided for Oozie Server. Exiting")
     sys.exit(1)
   if not oozie_server_timeout.isdigit():
-    print "Invalid timeout value specified for Oozie server. Using default of 3 seconds"
+    print ("Invalid timeout value specified for Oozie server. Using default of 3 seconds")
     oozie_server_timeout = 3
 
   # Prepare dictionary object with config variables populated
@@ -117,7 +116,7 @@ def collect_oozie_metrics(oozie_server_host,oozie_server_port,timeout):
           data = json.loads(response.read())
           return data
     except (urllib2.URLError, urllib2.HTTPError) as e:
-      print 'Oozie metric gathering failed with error:', e.errno
+      print ('Oozie metric gathering failed with error:', e.errno)
 
 # Publishing the Metrics to Collector
 def publish_metrics(metric_data,ams_collector_host,ams_collector_port,timeout):
@@ -130,9 +129,9 @@ def publish_metrics(metric_data,ams_collector_host,ams_collector_port,timeout):
     #print metric_data
     try:
       response = urllib2.urlopen(req,timeout=timeout)
-      print "Response code was: %d" %response.getcode()
+      print ("Response code was: %d" %response.getcode())
     except (urllib2.URLError, urllib2.HTTPError) as e:
-      print 'Metrics submission failed with error:', e.errno
+      print ('Metrics submission failed with error:', e.errno)
 
 def main():
 
@@ -154,13 +153,13 @@ def main():
         metric_data_json = construct_metric(str(counter_types),oozie_metrics_data[key][counter_types]['count'],config_dict["oozie_server"],timestamp)
         #print "Publishing metric data for metric: ", str(counter_types)
         #print str(counter_types),oozie_metrics_data[key][counter_types]['count']
-        print metric_data_json
+        print (metric_data_json)
         publish_metrics(metric_data_json,config_dict["ams_collector_host"],config_dict["ams_collector_port"],ams_collector_timeout)
       else :
         metric_data_json = construct_metric(str(counter_types),oozie_metrics_data[key][counter_types]['value'],config_dict["oozie_server"],timestamp)
         #print str(counter_types),oozie_metrics_data[key][counter_types]
         #print "Publishing metric data for metric: ", str(counter_types)
-        print metric_data_json
+        print (metric_data_json)
         publish_metrics(metric_data_json,config_dict["ams_collector_host"],config_dict["ams_collector_port"],ams_collector_timeout)
     i += 1
 
